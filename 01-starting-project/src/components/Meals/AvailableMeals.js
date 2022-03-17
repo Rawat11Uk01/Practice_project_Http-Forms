@@ -1,32 +1,35 @@
 import { useEffect, useState } from 'react';
+
 import Card from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import classes from './AvailableMeals.module.css';
 
 
-
-
 const AvailableMeals = () => {
-  const [meals,setMeals]=useState([]);
-  useEffect(()=>{
-     const fetchMeals =async ()=>{
+  const [meals, setMeals] = useState([]);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
       const response = await fetch('https://react-http-331ba-default-rtdb.firebaseio.com/meals.json');
-       const responseData = await response.json();
-      
-       const loadedMeales = [];
-       for(const key in responseData){
-         loadedMeales.push({
-           id: key,
-           name: responseData[key].name,
-           description: responseData[key].description,
-           price: responseData[key].price,
-         })
-       
-       }
-       setMeals(loadedMeales);
-     }
-     fetchMeals();
-  },[]);
+      const responseData = await response.json();
+
+      const loadedMeals = [];
+
+      for (const key in responseData) {
+        loadedMeals.push({
+          id: key,
+          name: responseData[key].name,
+          description: responseData[key].description,
+          price: responseData[key].price,
+        });
+      }
+
+      setMeals(loadedMeals);
+    };
+
+    fetchMeals();
+  }, []);
+
   const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
