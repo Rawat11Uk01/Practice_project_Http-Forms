@@ -16,7 +16,9 @@ const AvailableMeals = () => {
       
       const response = await fetch('https://react-http-331ba-default-rtdb.firebaseio.com/meals.json');
       const responseData = await response.json();
-      
+      if(!response.ok){
+        throw new Error('Something Went Wrong')
+      }
       const loadedMeals = [];
 
       for (const key in responseData) {
@@ -32,9 +34,21 @@ const AvailableMeals = () => {
       setIsLoading(false);
     };
 
-    fetchMeals();
-   
+ fetchMeals().catch(error=>{
+  setIsLoading(false);
+  setError(error.message);
+ });
+
+
+
   }, []);
+  if( error){
+    return <section className={classes.MealsLoading}>
+      <p>
+      {error}
+      </p>
+    </section>
+  }
   if(isLoading){
     return <section className={classes.MealsLoading}>
       <p>
